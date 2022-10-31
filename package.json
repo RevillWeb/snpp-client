@@ -38,9 +38,12 @@
     "node": ">=0.10"
   },
   "devDependencies": {
-    "should": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/benburwell/snpp-client"
+  "homepage": "https://github.com/benburwell/snpp-client",
+  "dependencies": {
+    "command-line-args": "^5.2.1"
+  }
 }
