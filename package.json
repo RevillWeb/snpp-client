@@ -1,15 +1,14 @@
 {
-  "name": "snpp-client",
+  "name": "rw-snpp-client",
   "version": "0.0.1",
   "author": {
-    "name": "Ben Burwell",
-    "email": "hi@benburwell.com"
+    "name": "Leon Revill",
+    "email": "leon@revillweb.com"
   },
   "maintainers": [
     {
-      "name": "Ben Burwell",
-      "email": "hi@benburwell.com",
-      "url": "http://www.benburwell.com/"
+      "name": "Leon Revill",
+      "email": "leon@revillweb.com"
     }
   ],
   "description": "A Simple Network Paging Protocol (SNPP) client for Node.js",
