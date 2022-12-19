@@ -1,5 +1,5 @@
 // Include our local copy of the SNPP client
-const client = require("../lib/snpp");
+const SnppClient = require("../lib/SnppClient.js");
 const cla = require("command-line-args");
 
 const options = cla([
@@ -11,7 +11,7 @@ const options = cla([
     { name: "pagerId", type: Number },
     { name: "text", type: String }
 ]);
-// "35.179.63.2"
+
 if (!options.host) {
     console.error(`A host (e.g. 127.0.0.1) must be specified`);
     process.exit();
@@ -21,24 +21,42 @@ if (!options.pagerId) {
     process.exit();
 }
 
-// now we'll send a "page"
-client.page({
-    host: options.host,
-    port: options.port,
-    username: options.username,
-    password: options.password,
-    message: {
-        pagerId: options.pagerId,
-        text: options.text
-    },
-    verbose: options.verbose
-}, function (result) {
-    if (result.status === "success") {
-        console.log("✅ Page sent successfully!");
-    } else {
-        console.log('Error: ' + result.message);
-    }
+const client = new SnppClient(options.port, options.host);
+
+// Connect to the SNPP server
+console.log(`--> Open Connection`);
+client.connect().then(res => {
+    // Login if username and password has been provided
+    client.login(options.username, options.password).then(res => {
+        // Set the pager ID
+        client.page(options.pagerId).then(res => {
+            // Set the message text
+            client.message(options.text).then(res => {
+                // Send the message
+                client.send().then(res => {
+                    // Quit
+                    client.quit().then(res => {
+                        console.log("✅ Page sent successfully!");
+                        process.exit();
+                    }).catch(error => {
+                        console.error("Could not quit:", error);
+                        process.exit();
+                    });
+                }).catch(error => {
+                    console.error("Message not sent:", error);
+                    process.exit();
+                });
+            }).catch(error => {
+                console.error("Message not accepted:", error);
+                process.exit();
+            });
+        }).catch(error => {
+            console.error("Pager ID not accepted:", error);
+            process.exit();
+        });
+    }).catch(error => {
+        console.error("Unable to login:", error);
+        process.exit();
+    });
+    
 });
-
-
-
